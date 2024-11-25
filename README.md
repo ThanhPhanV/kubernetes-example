@@ -1,4 +1,4 @@
-# Kubernetes Example
+# Example Of Deploying Kubernetes (K8S)
 
 In this articles, I will show an example of deploying a microservices system by using Kubernetes (also called K8S).
 
