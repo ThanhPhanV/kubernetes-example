@@ -1,0 +1,37 @@
+# Stage 1: Build
+FROM node:18 AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json và package-lock.json
+COPY package*.json ./
+
+# Cài đặt dependencies
+RUN npm install
+
+# Copy toàn bộ mã nguồn vào container
+COPY . .
+
+# Build ứng dụng NestJS
+RUN npm run build
+
+# Stage 2: Run
+FROM node:18-alpine AS runner
+
+# Set working directory
+WORKDIR /app
+
+# Copy từ stage build
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY package*.json ./
+
+# Tùy chọn: nếu cần thêm file, hãy copy
+# COPY .env ./
+
+# Expose port (mặc định của NestJS là 3000)
+EXPOSE 3001
+
+# Start ứng dụng
+CMD ["node", "dist/main"]

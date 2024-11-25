@@ -1,0 +1,1 @@
+export const USER_CLIENT_PROVIDER = 'HTTP_CLIENT_USER';

@@ -1,0 +1,1 @@
+kubectl apply -f ./k8s/back-end.config-map.yml

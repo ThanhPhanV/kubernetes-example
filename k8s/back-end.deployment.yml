@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-end
+  labels:
+    app: back-end
+spec:
+  replicas: 2  
+  selector:
+    matchLabels:
+      app: back-end
+  template:
+    metadata:
+      labels:
+        app: back-end
+    spec:
+      containers:
+      - name: back-end
+        image: thanhphan1098/k8s-review-back-end:latest  # Tên image Docker của bạn
+        ports:
+        - containerPort: 3000  # Cổng mà container sẽ nghe
+        envFrom:
+        - configMapRef:
+            name: back-end-config-map

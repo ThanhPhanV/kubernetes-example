@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-end-config-map
+data:
+  ENDPOINT_USER_SERVICE: http://user-service:3001
+  ES_END_POINT: https://c3e1d5c5fff1432b9cd1d878a76916bb.us-central1.gcp.cloud.es.io:443
+  ES_API_KEY: VXQwcFBwTUIxa3pSZ3RRWEI2XzA6UUlUSlpSX1VTdzZ2T3N2MGZsektMUQ==
+  ES_INDEX_USER: user_list
+
+  APM_SERVICE_NAME: my-service-name
+  APM_SECRET_TOKEN: zRuuggC3TbyZbkygln
+  APM_SERVER_URL: https://4d079e82679c4ad2a98c72348861a08f.apm.us-central1.gcp.cloud.es.io:443
+  APM_ENV: my-environment

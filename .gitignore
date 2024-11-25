@@ -1,0 +1,8 @@
+/back-end/node_modules
+/user_service/node_modules
+
+/back-end/dist
+/user_service/dist
+
+/back-end/.env
+/user_service/.env
