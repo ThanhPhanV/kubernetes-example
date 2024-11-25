@@ -71,3 +71,13 @@ export class AppService {
   }
 }
 ```
+
+Secondly, we build **Back-End Service** which is responsible for connecting with **Front End**.
+Back-End receive requests from Front-End, then call to other services to get infomation if needed. The steps are similar to **User Service** above.
+
+```typescript
+$ npm i -g @nestjs/cli
+$ nest new back-end
+```
+
+We build a set of APIs that are creating, reading, updating and deleting users. All of these APIs will call to **User Service**.
