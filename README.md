@@ -15,7 +15,7 @@ The system includes two main services: back-end, and user-service. All of these 
 
 ## Build services using Docker
 
-Firstly, initialize **User Service** by using NestJS.
+### 1. Initialize **User Service** by using NestJS.
 
 ```
 $ npm i -g @nestjs/cli
@@ -72,6 +72,8 @@ export class AppService {
 }
 ```
 
+### 2. Create Back-End Service
+
 Secondly, we build **Back-End Service** which is responsible for connecting with **Front End**.
 Back-End receive requests from Front-End, then call to other services to get infomation if needed. The steps are similar to **User Service** above.
 
@@ -117,4 +119,53 @@ export class AppService {
     return result;
   }
 }
+```
+
+### 3. Build Docker Images And Push To DockerHub.
+
+To deploy with Kubernetes, we must build both back-end service and user-service to docker images and push them to dockerhub.
+Sign up account DockerHub here. https://hub.docker.com/
+
+Login to docker CLI and type username and password.
+
+```
+$ docker login
+```
+
+To build back-end image, go to back-end directory and run these commands:
+
+```
+## Go back-end directory
+$ docker build -t back-end:latest .
+```
+
+Tag docker image.
+
+```
+docker tag back-end:latest <dockerhub-username>/back-end:latest
+```
+
+Push it to docker hub.
+
+```
+docker push <dockerhub-username>/back-end:latest
+```
+
+Then, build **user-service**
+
+```
+## Go to user-service directory
+$ docker build -t user-service:latest .
+```
+
+Tag docker image.
+
+```
+docker tag user-service:latest <dockerhub-username>/user-service:latest
+```
+
+Push it to docker hub.
+
+```
+docker push <dockerhub-username>/user-service:latest
 ```
