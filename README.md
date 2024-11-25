@@ -124,7 +124,7 @@ export class AppService {
 ### 3. Build Docker Images And Push To DockerHub.
 
 To deploy with Kubernetes, we must build both back-end service and user-service to docker images and push them to dockerhub.
-Sign up account DockerHub here. https://hub.docker.com/
+Sign up account DockerHub [here](https://hub.docker.com/).
 
 Login to docker CLI and type username and password.
 
@@ -137,35 +137,187 @@ To build back-end image, go to back-end directory and run these commands:
 ```
 ## Go back-end directory
 $ docker build -t back-end:latest .
-```
 
-Tag docker image.
-
-```
-docker tag back-end:latest <dockerhub-username>/back-end:latest
-```
-
-Push it to docker hub.
-
-```
-docker push <dockerhub-username>/back-end:latest
-```
-
-Then, build **user-service**
-
-```
-## Go to user-service directory
+## Go to user-service
 $ docker build -t user-service:latest .
 ```
 
 Tag docker image.
 
 ```
-docker tag user-service:latest <dockerhub-username>/user-service:latest
+## Go to back-end
+$ docker tag back-end:latest <dockerhub-username>/back-end:latest
+
+## Go to user-service
+$ docker tag user-service:latest <dockerhub-username>/user-service:latest
 ```
 
 Push it to docker hub.
 
 ```
-docker push <dockerhub-username>/user-service:latest
+## Go to back-end
+$ docker push <dockerhub-username>/back-end:latest
+
+## Go to user-service
+$ docker push <dockerhub-username>/user-service:latest
 ```
+
+## Deploy Using Kubernetes
+
+To create a K8S cluster in the local computer, Minikube is good choice.
+
+#### 1. Install MiniKube
+
+Follow this guide [here](https://kubernetes.io/vi/docs/tasks/tools/install-minikube/).
+
+#### 2. Store Environment Variables
+
+To store environment avariables like .env file, we use **_config map_** API object. See detail [here](https://kubernetes.io/docs/concepts/configuration/configmap/)
+
+Create a k8s folder, and then create a file named **_back-end.config-map.yml_**
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-end-config-map
+data:
+  ENDPOINT_USER_SERVICE: http://user-service:3001
+```
+
+Then, use kubectl command to apply this file.
+
+```
+$ kubectl apply -f ./k8s/back-end.config-map.yml
+```
+
+#### 3. Deploy Back End Service
+
+Create deployment and service for back-end service
+
+> **_back-end.deployment.yml_** file:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-end
+  labels:
+    app: back-end
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: back-end
+  template:
+    metadata:
+      labels:
+        app: back-end
+    spec:
+      containers:
+        - name: back-end
+          image: <dockerhub-username>/back-end:latest # Tên image Docker của bạn
+          ports:
+            - containerPort: 3000 # Cổng mà container sẽ nghe
+          envFrom:
+            - configMapRef:
+                name: back-end-config-map
+```
+
+> **_back-end.service.yml_** file:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-end-service
+spec:
+  selector:
+    app: back-end # Matches the labels of the backend pods
+  ports:
+    - protocol: TCP
+      port: 3000 # Service port
+      targetPort: 3000 # Pod containerPort
+  type: ClusterIP
+```
+
+Apply these of deployment and service
+
+```
+$ kubectl apply -f ./k8s/back-end.deployment.yml
+$ kubectl apply -f ./k8s/back-end.service.yml
+```
+
+#### 3. Deploy User Service
+
+Create deployment and service for User Service
+
+> **_user-service.deployment.yml_** file:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: <dockerhub-username>/user-service:latest # Tên image Docker của bạn
+          ports:
+            - containerPort: 3001 # Cổng mà container sẽ nghe
+```
+
+> **_user-service.service.yml_** file:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service # Matches the labels of the backend pods
+  ports:
+    - protocol: TCP
+      port: 3001 # Service port
+      targetPort: 3001 # Pod containerPort
+  type: ClusterIP
+```
+
+Apply these of deployment and service
+
+```
+$ kubectl apply -f ./k8s/user-service.deployment.yml
+$ kubectl apply -f ./k8s/user-service.service.yml
+```
+
+#### 4. Forward ports
+
+To access the back-end (In kubernete cluster), we must forward port from K8S cluster to outside by using this command.
+
+```
+$ kubectl port-forward deployment/back-end 3000:3000
+```
+
+In cloud, we can use Load Balancer, NodePort, etc.
+
+## Conclusion
+
+Congratulation on completing simple microservices system using Kubernetes. We start coding back-end and user service using NestJS, we dockerize them into images and push to DockerHub. In addition, we also write K8S yaml files and commands to deploy Kubernetes system. Thank you for reading here. If you have any feedback, please contact me.
+
+## Contact
+
+- Author: Thanh Phan
+- Email: pvthanh98it@gmail.com
+- Website: https://thanhphanv.com
