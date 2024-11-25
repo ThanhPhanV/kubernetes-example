@@ -1,8 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { USER_CLIENT_PROVIDER } from '../constants';
 import { Axios } from 'axios';
 import { UserDto } from '../../dto/create-user.dto';
