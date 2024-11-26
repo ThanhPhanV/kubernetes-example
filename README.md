@@ -347,6 +347,6 @@ Congratulation on completing simple microservices system using Kubernetes. We st
 
 ## Contact
 
-- Author: Thanh Phan
+- Author: Thanh Phan (ThanhPhanV)
 - Email: pvthanh98it@gmail.com
 - Website: https://thanhphanv.com
