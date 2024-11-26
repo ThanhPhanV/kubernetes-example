@@ -14,21 +14,21 @@ export class AppService {
   }
   async createUser(createUserDto: UserDto) {
     const result = await this.axiosInstance.post('user', createUserDto);
-    return result;
+    return result?.data;
   }
 
   async getUser() {
     const result = await this.axiosInstance.get('user');
-    return result;
+    return result?.data;
   }
 
   async getUserById(id: string) {
     const result = await this.axiosInstance.get(`user/:${id}`);
-    return result;
+    return result?.data;
   }
 
   async deleteUserById(id: string) {
     const result = await this.axiosInstance.get(`user/:${id}`);
-    return result;
+    return result?.data;
   }
 }

@@ -112,22 +112,22 @@ export class AppService {
   }
   async createUser(createUserDto: UserDto) {
     const result = await this.axiosInstance.post("user", createUserDto);
-    return result;
+    return result?.data;
   }
 
   async getUser() {
     const result = await this.axiosInstance.get("user");
-    return result;
+    return result?.data;
   }
 
   async getUserById(id: string) {
     const result = await this.axiosInstance.get(`user/:${id}`);
-    return result;
+    return result?.data;
   }
 
   async deleteUserById(id: string) {
     const result = await this.axiosInstance.get(`user/:${id}`);
-    return result;
+    return result?.data;
   }
 }
 ```
@@ -322,6 +322,24 @@ $ kubectl port-forward deployment/back-end 3000:3000
 ```
 
 In cloud, we can use Load Balancer, NodePort, etc.
+
+#### 4. Test
+
+##### Create User
+
+```curl
+curl --location 'http://localhost:3000/user' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Thanh Phan"
+}'
+```
+
+##### Get Users
+
+```curl
+curl --location 'http://localhost:3000/user'
+```
 
 ## Conclusion
 

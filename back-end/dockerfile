@@ -27,4 +27,4 @@ RUN ls
 RUN pwd
 
 # Start ứng dụng
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/main.js"]
