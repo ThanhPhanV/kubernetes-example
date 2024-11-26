@@ -1,4 +1,4 @@
-# Kubernetes example, deploy a simple microservices
+# Kubernetes (K8S) example - deploy a simple microservices
 
 In this repository, I will show you how to deploy a microservices system using Kubernetes (K8S). Additionally, I’ll include example Kubernetes system code for reference and practical implementation.
 
